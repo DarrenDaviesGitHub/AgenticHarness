@@ -1,0 +1,83 @@
+# Exercises every row of the HTTP contract. Run the API with the "https" or "http" launch profile first.
+@baseUrl = http://localhost:5180
+
+### List products (200)
+GET {{baseUrl}}/api/products?page=1&pageSize=20
+Accept: application/json
+
+### List products with invalid paging (400 ValidationProblemDetails)
+GET {{baseUrl}}/api/products?page=0&pageSize=500
+Accept: application/json
+
+### Create a product (201 + Location header)
+# @name create
+POST {{baseUrl}}/api/products
+Content-Type: application/json
+
+{
+  "name": "Mechanical keyboard",
+  "description": "Tenkeyless, hot-swappable switches",
+  "sku": "KB-TKL-001",
+  "price": 129.99
+}
+
+### Create with the same SKU (409 Conflict)
+POST {{baseUrl}}/api/products
+Content-Type: application/json
+
+{
+  "name": "Duplicate keyboard",
+  "sku": "KB-TKL-001",
+  "price": 99.00
+}
+
+### Create an invalid product (400 ValidationProblemDetails)
+POST {{baseUrl}}/api/products
+Content-Type: application/json
+
+{
+  "name": "",
+  "sku": "not valid!",
+  "price": 0
+}
+
+### Get the created product (200)
+GET {{baseUrl}}/api/products/{{create.response.body.$.id}}
+Accept: application/json
+
+### Get a product that does not exist (404)
+GET {{baseUrl}}/api/products/0199a1b2-0000-7000-8000-000000000000
+Accept: application/json
+
+### Update the product (204)
+PUT {{baseUrl}}/api/products/{{create.response.body.$.id}}
+Content-Type: application/json
+
+{
+  "name": "Mechanical keyboard v2",
+  "description": "Now with PBT keycaps",
+  "sku": "KB-TKL-001",
+  "price": 139.99
+}
+
+### Update a product that does not exist (404)
+PUT {{baseUrl}}/api/products/0199a1b2-0000-7000-8000-000000000000
+Content-Type: application/json
+
+{
+  "name": "Ghost",
+  "sku": "GHOST-1",
+  "price": 1.00
+}
+
+### Delete the product (204)
+DELETE {{baseUrl}}/api/products/{{create.response.body.$.id}}
+
+### Delete it again (404)
+DELETE {{baseUrl}}/api/products/{{create.response.body.$.id}}
+
+### Health check (200 Healthy)
+GET {{baseUrl}}/health
+
+### OpenAPI document (Development only)
+GET {{baseUrl}}/openapi/v1.json

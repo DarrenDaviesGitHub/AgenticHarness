@@ -1,0 +1,1 @@
+- [Full-repo review 2026-10-03](review_2026-10-03_full-repo.md) — recurring weak spots: SKU race to 409, paging overflow, logging, test helper

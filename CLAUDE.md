@@ -1,0 +1,91 @@
+# Ardent.Project
+
+<!-- Maintainers: keep this file under 150 lines. Per-layer detail belongs in .claude/rules/, workflows in .claude/skills/. -->
+
+ASP.NET Core Web API on .NET 10 / C# 14 using Clean Architecture and CQRS. The `Products` CRUD slice is the
+canonical example: every new feature copies its shape. Stack: MediatR 14 (pipeline behaviours), FluentValidation 12,
+EF Core 10 + SQLite, built-in OpenAPI 3.1 + Scalar, RFC 9457 ProblemDetails, xUnit v3 + Shouldly + NSubstitute,
+ArchUnitNET. Package versions live only in `Directory.Packages.props`.
+
+## Commands
+
+| Task | Command |
+| --- | --- |
+| Build (warnings are errors) | `dotnet build -warnaserror` |
+| All tests | `dotnet test` |
+| One project | `dotnet test --project tests/Ardent.Project.Application.UnitTests` |
+| One test | `dotnet test --project tests/Ardent.Project.Domain.UnitTests --filter-method "*Create_BlankName*"` |
+| Format / check format | `dotnet format` / `dotnet format --verify-no-changes` |
+| Run the API (Scalar UI at /scalar) | `dotnet run --project src/Ardent.Project.Api --launch-profile https` |
+| Restore local tools (dotnet-ef) | `dotnet tool restore` |
+| Add a migration | `/add-migration <Name>` (wraps `dotnet ef migrations add`) |
+| Apply migrations | Automatic on startup in Development; otherwise `dotnet ef database update --project src/Ardent.Project.Infrastructure --startup-project src/Ardent.Project.Api` |
+| Regenerate `docs/openapi.json` | `dotnet build src/Ardent.Project.Api` |
+
+## Architecture
+
+| Layer | Holds | May depend on |
+| --- | --- | --- |
+| `Domain` | Entities, invariants, `DomainException` | nothing (BCL only) |
+| `Application` | Commands/queries + handlers + validators, behaviours, repository interfaces, response records | Domain |
+| `Infrastructure` | EF Core `ApplicationDbContext` (also `IUnitOfWork`), configurations, repositories, migrations, options | Application |
+| `Api` | Controllers, request records, exception handler, OpenAPI, `Program.cs` | Application (+ Infrastructure only in `Program.cs`) |
+
+The dependency rule is enforced by `tests/Ardent.Project.ArchitectureTests`. Request flow:
+controller -> `ISender` -> `LoggingBehaviour` -> `ValidationBehaviour` -> handler -> repository -> EF Core -> response record.
+
+A new feature `Orders` puts files in:
+- `src/*.Domain/Orders/Order.cs`
+- `src/*.Application/Orders/<UseCase>/` (record + handler + validator), `Orders/OrderResponse.cs`, and a repository interface in `Common/Interfaces/`
+- `src/*.Infrastructure/Persistence/Configurations/` and `Persistence/Repositories/`, plus registration in `DependencyInjection.cs`
+- `src/*.Api/Controllers/OrdersController.cs` and `src/*.Api/Contracts/`
+- Tests mirroring each of those folders, plus integration tests for every endpoint
+
+## HTTP contract (Products)
+
+| Operation | Route | Success | Errors (ProblemDetails) |
+| --- | --- | --- | --- |
+| List | `GET /api/products?page=1&pageSize=20` | 200 `PagedResponse<ProductResponse>` | 400 |
+| Get | `GET /api/products/{id:guid}` | 200 `ProductResponse` | 404 |
+| Create | `POST /api/products` | 201 + Location + body | 400, 409 duplicate SKU |
+| Update | `PUT /api/products/{id:guid}` | 204 | 400, 404, 409 |
+| Delete | `DELETE /api/products/{id:guid}` | 204 | 404 |
+
+Exceptions map to status codes in `src/Ardent.Project.Api/ExceptionHandling/GlobalExceptionHandler.cs`:
+FluentValidation `ValidationException` and `DomainException` -> 400, `NotFoundException` -> 404,
+`ConflictException` -> 409, anything else -> 500 with no internals outside Development.
+
+## Non-negotiable conventions
+
+- Explicit types, never `var` (build error). Target-typed `new()` is fine when the type is on the left.
+- File-scoped namespaces matching the folder; one type per file.
+- `sealed` by default; records for DTOs, requests, responses, commands and queries.
+- Primary constructors for DI; never reassign their parameters.
+- `CancellationToken` passed to every async call; async methods end in `Async`.
+- `TimeProvider` for time, `Guid.CreateVersion7()` for IDs, explicit static mappers (no AutoMapper).
+- Every error response is RFC 9457 ProblemDetails with `traceId` and `instance`.
+- Structured logging with message templates, never string interpolation.
+
+## Workflow
+
+- New endpoint or feature: run `/add-feature <description>`. More tests: `/add-tests <target>`. Schema change: `/add-migration <Name>`.
+- Run `/verify` before every commit; `/review` for a multi-agent review of the diff; `/commit` to commit.
+- Never hand-edit `Persistence/Migrations/*` or `docs/openapi.json` (a hook blocks it). Both are generated.
+- Record significant decisions with `/new-adr <title>` in `docs/adr/`.
+
+## Definition of done
+
+1. `dotnet build -warnaserror` passes with zero warnings.
+2. `dotnet format --verify-no-changes` passes.
+3. `dotnet test` passes, and new behaviour has tests (unit for logic, integration for every HTTP contract row).
+4. `docs/openapi.json` was regenerated by the build and is committed with the change.
+5. Architecture tests still pass without being weakened.
+
+## Gotchas
+
+- MediatR 14 needs a licence key: `dotnet user-secrets set "MediatR:LicenseKey" "<key>" --project src/Ardent.Project.Api` locally, the `MediatR__LicenseKey` env var in CI/production. Without it, MediatR logs a warning but works. Never commit the key.
+- SQLite stores `decimal` and `DateTimeOffset` as TEXT: no server-side `ORDER BY`/comparisons on them.
+- Integration tests run the real `Program` in Development with an in-memory SQLite database per test class; startup applies migrations.
+- `[ApiController]` model-binding errors (malformed JSON, missing body) return 400 before MediatR runs; their keys use JSON paths such as `$.name`.
+- The `Stop` hook builds the solution when C# files changed. If it blocks you, fix the reported errors and do not disable it.
+- Hooks need PowerShell 7 (`pwsh`) on PATH on every OS. See `.claude/hooks/README.md`.

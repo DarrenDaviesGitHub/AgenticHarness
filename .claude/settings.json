@@ -1,0 +1,155 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(dotnet build *)",
+      "Bash(dotnet test *)",
+      "Bash(dotnet format *)",
+      "Bash(dotnet restore *)",
+      "Bash(dotnet tool restore *)",
+      "Bash(dotnet ef migrations add *)",
+      "Bash(dotnet ef migrations list *)",
+      "Bash(dotnet ef migrations script *)",
+      "Bash(dotnet list package *)",
+      "Bash(git status *)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(git show *)",
+      "Bash(git branch)",
+      "Bash(git branch --show-current)",
+      "Bash(git branch --list *)",
+      "Bash(git ls-files *)",
+      "PowerShell(dotnet build *)",
+      "PowerShell(dotnet test *)",
+      "PowerShell(dotnet format *)",
+      "PowerShell(dotnet restore *)",
+      "PowerShell(dotnet tool restore *)",
+      "PowerShell(dotnet ef migrations add *)",
+      "PowerShell(dotnet ef migrations list *)",
+      "PowerShell(dotnet ef migrations script *)",
+      "PowerShell(dotnet list package *)",
+      "PowerShell(git status *)",
+      "PowerShell(git diff *)",
+      "PowerShell(git log *)",
+      "PowerShell(git show *)",
+      "PowerShell(git branch)",
+      "PowerShell(git branch --show-current)",
+      "PowerShell(git branch --list *)",
+      "PowerShell(git ls-files *)",
+      "mcp__microsoft-learn"
+    ],
+    "ask": [
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(dotnet add package *)",
+      "Bash(dotnet ef database update *)",
+      "PowerShell(git commit *)",
+      "PowerShell(git push *)",
+      "PowerShell(dotnet add package *)",
+      "PowerShell(dotnet ef database update *)"
+    ],
+    "deny": [
+      "Read(.env)",
+      "Read(.env.*)",
+      "Read(**/secrets.json)",
+      "Read(**/*.pfx)",
+      "Read(**/*.p12)",
+      "Read(**/*.key)",
+      "Read(**/*.pem)",
+      "Bash(rm -rf *)",
+      "Bash(rm -fr *)",
+      "Bash(git push --force *)",
+      "Bash(git push -f *)",
+      "Bash(git push * --force *)",
+      "Bash(git push * -f *)",
+      "Bash(git reset --hard *)",
+      "Bash(dotnet ef database drop *)",
+      "Bash(sh)",
+      "Bash(bash)",
+      "Bash(zsh)",
+      "PowerShell(Remove-Item * -Recurse *)",
+      "PowerShell(git push --force *)",
+      "PowerShell(git push -f *)",
+      "PowerShell(git reset --hard *)",
+      "PowerShell(dotnet ef database drop *)",
+      "PowerShell(Invoke-Expression *)"
+    ]
+  },
+  "env": {
+    "DOTNET_CLI_TELEMETRY_OPTOUT": "1",
+    "DOTNET_NOLOGO": "1"
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pwsh",
+            "args": ["-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-File", "${CLAUDE_PROJECT_DIR}/.claude/hooks/session-context.ps1"],
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pwsh",
+            "args": ["-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-File", "${CLAUDE_PROJECT_DIR}/.claude/hooks/protect-files.ps1"],
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Bash|PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pwsh",
+            "args": ["-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-File", "${CLAUDE_PROJECT_DIR}/.claude/hooks/guard-bash.ps1"],
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Edit(*.cs)",
+            "command": "pwsh",
+            "args": ["-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-File", "${CLAUDE_PROJECT_DIR}/.claude/hooks/format-cs.ps1"],
+            "timeout": 15
+          },
+          {
+            "type": "command",
+            "if": "Write(*.cs)",
+            "command": "pwsh",
+            "args": ["-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-File", "${CLAUDE_PROJECT_DIR}/.claude/hooks/format-cs.ps1"],
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pwsh",
+            "args": ["-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-File", "${CLAUDE_PROJECT_DIR}/.claude/hooks/build-check.ps1"],
+            "timeout": 300,
+            "statusMessage": "Checking the build"
+          }
+        ]
+      }
+    ]
+  }
+}

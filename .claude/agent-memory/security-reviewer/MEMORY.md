@@ -1,0 +1,1 @@
+- [Baseline review 2026-10-03](review_2026-10-03_full-repo.md) — clean scan; open items: SKU race 500, body limit, HSTS

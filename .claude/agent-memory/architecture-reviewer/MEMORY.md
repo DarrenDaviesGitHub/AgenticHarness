@@ -1,0 +1,1 @@
+- [Baseline review 2026-10-03](project_baseline_review.md) — accepted patterns and findings raised on the Products template

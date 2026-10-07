@@ -1,0 +1,4 @@
+# LF everywhere so dotnet format gives the same result on Windows, macOS and Linux.
+* text=auto eol=lf
+*.png binary
+*.ico binary

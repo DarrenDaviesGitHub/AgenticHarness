@@ -1,0 +1,105 @@
+root = true
+
+[*]
+indent_style = space
+indent_size = 4
+end_of_line = lf
+charset = utf-8
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.{json,yml,yaml,props,targets,csproj,slnx,xml}]
+indent_size = 2
+
+[*.md]
+trim_trailing_whitespace = false
+
+[*.cs]
+# Explicit types everywhere; target-typed new() is fine when the type is on the left.
+csharp_style_var_for_built_in_types = false:error
+csharp_style_var_when_type_is_apparent = false:error
+csharp_style_var_elsewhere = false:error
+dotnet_diagnostic.IDE0007.severity = none
+dotnet_diagnostic.IDE0008.severity = error
+csharp_style_implicit_object_creation_when_type_is_apparent = true:suggestion
+
+# File-scoped namespaces matching the folder structure.
+csharp_style_namespace_declarations = file_scoped:error
+dotnet_diagnostic.IDE0161.severity = error
+dotnet_style_namespace_match_folder = true:error
+dotnet_diagnostic.IDE0130.severity = error
+
+# Primary constructors, collection expressions and modern patterns.
+csharp_style_prefer_primary_constructors = true:suggestion
+dotnet_style_prefer_collection_expression = when_types_loosely_match:warning
+dotnet_diagnostic.IDE0028.severity = warning
+dotnet_diagnostic.IDE0300.severity = warning
+dotnet_diagnostic.IDE0305.severity = warning
+csharp_style_prefer_pattern_matching = true:suggestion
+csharp_style_prefer_switch_expression = true:suggestion
+
+# Hygiene enforced in build.
+# unnecessary usings
+dotnet_diagnostic.IDE0005.severity = error
+# braces on if/else/loops
+dotnet_diagnostic.IDE0011.severity = error
+csharp_prefer_braces = true:error
+# explicit accessibility modifiers
+dotnet_diagnostic.IDE0040.severity = error
+dotnet_style_require_accessibility_modifiers = for_non_interface_members:error
+# formatting
+dotnet_diagnostic.IDE0055.severity = error
+# unused parameters
+dotnet_diagnostic.IDE0060.severity = error
+
+# Usings. Order is not enforced: renaming Ardent.Project via dotnet new -n changes the alphabetical order.
+csharp_using_directive_placement = outside_namespace:error
+
+# Formatting
+csharp_new_line_before_open_brace = all
+csharp_new_line_before_else = true
+csharp_new_line_before_catch = true
+csharp_new_line_before_finally = true
+csharp_indent_case_contents = true
+csharp_indent_switch_labels = true
+csharp_space_after_keywords_in_control_flow_statements = true
+
+# Naming: _camelCase private fields, PascalCase types and members, IPascalCase interfaces.
+dotnet_naming_symbols.constants.applicable_kinds = field
+dotnet_naming_symbols.constants.required_modifiers = const
+dotnet_naming_style.pascal.capitalization = pascal_case
+dotnet_naming_rule.constants_pascal.symbols = constants
+dotnet_naming_rule.constants_pascal.style = pascal
+dotnet_naming_rule.constants_pascal.severity = error
+
+dotnet_naming_symbols.private_fields.applicable_kinds = field
+dotnet_naming_symbols.private_fields.applicable_accessibilities = private
+dotnet_naming_style.underscore_camel.capitalization = camel_case
+dotnet_naming_style.underscore_camel.required_prefix = _
+dotnet_naming_rule.private_fields_underscore.symbols = private_fields
+dotnet_naming_rule.private_fields_underscore.style = underscore_camel
+dotnet_naming_rule.private_fields_underscore.severity = error
+
+dotnet_naming_symbols.interfaces.applicable_kinds = interface
+dotnet_naming_style.i_pascal.capitalization = pascal_case
+dotnet_naming_style.i_pascal.required_prefix = I
+dotnet_naming_rule.interfaces_i_pascal.symbols = interfaces
+dotnet_naming_rule.interfaces_i_pascal.style = i_pascal
+dotnet_naming_rule.interfaces_i_pascal.severity = error
+
+# Analyzer tuning (one line of reasoning each).
+# LoggerMessage source generators are overkill for the sample's two log lines
+dotnet_diagnostic.CA1848.severity = suggestion
+# ASP.NET Core has no SynchronizationContext; ConfigureAwait adds noise
+dotnet_diagnostic.CA2007.severity = none
+
+[tests/**.cs]
+# Method_Scenario_ExpectedResult test names use underscores
+dotnet_diagnostic.CA1707.severity = none
+# xUnit requires public test classes
+dotnet_diagnostic.CA1515.severity = none
+# string URIs read better in HTTP tests
+dotnet_diagnostic.CA2234.severity = none
+
+[**/Migrations/**.cs]
+generated_code = true

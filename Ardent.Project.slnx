@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Ardent.Project.Api/Ardent.Project.Api.csproj" />
+    <Project Path="src/Ardent.Project.Application/Ardent.Project.Application.csproj" />
+    <Project Path="src/Ardent.Project.Domain/Ardent.Project.Domain.csproj" />
+    <Project Path="src/Ardent.Project.Infrastructure/Ardent.Project.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Ardent.Project.Api.IntegrationTests/Ardent.Project.Api.IntegrationTests.csproj" />
+    <Project Path="tests/Ardent.Project.Application.UnitTests/Ardent.Project.Application.UnitTests.csproj" />
+    <Project Path="tests/Ardent.Project.ArchitectureTests/Ardent.Project.ArchitectureTests.csproj" />
+    <Project Path="tests/Ardent.Project.Domain.UnitTests/Ardent.Project.Domain.UnitTests.csproj" />
+  </Folder>
+</Solution>

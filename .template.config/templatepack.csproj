@@ -1,0 +1,24 @@
+<!-- Packs the repository as a dotnet new template NuGet package: dotnet pack .template.config/templatepack.csproj -->
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <PackageType>Template</PackageType>
+    <PackageId>Ardent.CleanApi.Template</PackageId>
+    <PackageVersion>1.0.0</PackageVersion>
+    <Title>Clean Architecture Web API with Claude Code harness</Title>
+    <Authors>Ardent</Authors>
+    <Description>dotnet new cleanapi: .NET 10 Clean Architecture Web API with CQRS, tests and a Claude Code harness.</Description>
+    <PackageTags>dotnet-new;templates;clean-architecture;webapi;cqrs;claude-code</PackageTags>
+    <IncludeContentInPack>true</IncludeContentInPack>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <!-- The package holds files, not code: skip compilation and keep dotfiles such as .claude/ and .editorconfig. -->
+    <EnableDefaultItems>false</EnableDefaultItems>
+    <NoDefaultExcludes>true</NoDefaultExcludes>
+    <!-- NU5110/NU5111: the .ps1 files are Claude Code hooks for generated projects, not NuGet install scripts. -->
+    <NoWarn>$(NoWarn);NU5128;NU5110;NU5111</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="..\**\*"
+             Exclude="..\**\bin\**;..\**\obj\**;..\**\TestResults\**;..\.git\**;..\.vs\**;..\.idea\**;..\**\*.user;..\**\*.db;..\**\*.db-*;..\.claude\settings.local.json;..\.claude\agent-memory*\**;..\CLAUDE.local.md;..\REQUIREMENTS.md;..\TEMPLATE_PROMPT.md;..\.template.config\templatepack.csproj"
+             PackagePath="content\%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+</Project>

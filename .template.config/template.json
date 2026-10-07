@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Ardent",
+  "classifications": ["Web", "API", "Clean Architecture"],
+  "identity": "Ardent.CleanApi.CSharp",
+  "name": "Clean Architecture Web API with Claude Code harness",
+  "shortName": "cleanapi",
+  "description": "ASP.NET Core Web API on .NET 10: Clean Architecture, CQRS with MediatR, FluentValidation, EF Core + SQLite, OpenAPI + Scalar, ProblemDetails, xUnit v3 tests, and a ready-to-use Claude Code harness (CLAUDE.md, rules, agents, skills, hooks).",
+  "sourceName": "Ardent.Project",
+  "preferNameDirectory": true,
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "sources": [
+    {
+      "exclude": [
+        "**/[Bb]in/**",
+        "**/[Oo]bj/**",
+        ".template.config/**",
+        ".git/**",
+        ".vs/**",
+        ".idea/**",
+        "**/*.user",
+        "**/*.filelist",
+        "**/*.lock.json",
+        "**/TestResults/**",
+        "**/*.db",
+        "**/*.db-shm",
+        "**/*.db-wal",
+        ".claude/settings.local.json",
+        ".claude/agent-memory/**",
+        ".claude/agent-memory-local/**",
+        "CLAUDE.local.md",
+        "TEMPLATE.md",
+        "TEMPLATE_PROMPT.md",
+        "REQUIREMENTS.md"
+      ]
+    }
+  ],
+  "primaryOutputs": [
+    { "path": "Ardent.Project.slnx" }
+  ],
+  "postActions": [
+    {
+      "id": "restore",
+      "description": "Restore NuGet packages required by this project.",
+      "manualInstructions": [
+        { "text": "Run 'dotnet restore' and 'dotnet tool restore'" }
+      ],
+      "actionId": "210D431B-A78B-4D2F-B762-4ED3E3EA9025",
+      "continueOnError": true
+    }
+  ]
+}

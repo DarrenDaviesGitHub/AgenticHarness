@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Ardent.Project.Application\Ardent.Project.Application.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="NSubstitute" />
+    <Using Include="NSubstitute" />
+  </ItemGroup>
+</Project>
