@@ -1,6 +1,6 @@
 # Ardent.Project
 
-ASP.NET Core Web API on **.NET 10 / C# 14** built with Clean Architecture and CQRS. It ships with one complete sample feature (`Products` CRUD) that every new feature copies, and a Claude Code harness so AI-assisted work follows the same rules as you do.
+ASP.NET Core Web API on **.NET 11 / C# 15** built with Clean Architecture and CQRS. It ships with one complete sample feature (`Products` CRUD) that every new feature copies, and a Claude Code harness so AI-assisted work follows the same rules as you do.
 
 | Concern | Choice |
 | --- | --- |
@@ -13,7 +13,7 @@ ASP.NET Core Web API on **.NET 10 / C# 14** built with Clean Architecture and CQ
 
 ## Prerequisites
 
-- .NET 10 SDK (`global.json` accepts any 10.0.1xx or later feature band)
+- .NET 11 SDK
 - PowerShell 7 (`pwsh`) on `PATH`, used by the Claude Code hooks
 - Git. Run `git init` if the project is not in a repository yet; hooks and skills read git state.
 
