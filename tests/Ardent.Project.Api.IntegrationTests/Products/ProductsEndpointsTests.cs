@@ -1,5 +1,4 @@
 using System.Net;
-using System.Net.Http.Json;
 using Ardent.Project.Api.Contracts;
 using Ardent.Project.Api.IntegrationTests.Infrastructure;
 using Ardent.Project.Application.Common.Models;

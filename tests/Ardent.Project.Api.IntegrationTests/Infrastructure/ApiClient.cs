@@ -1,4 +1,3 @@
-using System.Net.Http.Json;
 using Ardent.Project.Api.Contracts;
 using Ardent.Project.Application.Products;
 using Microsoft.AspNetCore.Mvc;

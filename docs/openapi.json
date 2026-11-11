@@ -1,5 +1,5 @@
 {
-  "openapi": "3.1.1",
+  "openapi": "3.2.0",
   "info": {
     "title": "Ardent.Project API",
     "description": "Products sample built on Clean Architecture, CQRS (MediatR) and RFC 9457 ProblemDetails.",
@@ -71,7 +71,7 @@
         ],
         "summary": "Creates a product.",
         "requestBody": {
-          "description": "Aborts the request.",
+          "description": "The new product.",
           "content": {
             "application/json": {
               "schema": {
@@ -179,7 +179,7 @@
           }
         ],
         "requestBody": {
-          "description": "Aborts the request.",
+          "description": "The new values.",
           "content": {
             "application/json": {
               "schema": {

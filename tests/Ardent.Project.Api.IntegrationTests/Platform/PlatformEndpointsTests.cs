@@ -25,7 +25,7 @@ public sealed class PlatformEndpointsTests(ApiFactory factory) : IClassFixture<A
         string json = await _client.GetStringAsync("/openapi/v1.json", CancellationToken);
 
         using JsonDocument document = JsonDocument.Parse(json);
-        document.RootElement.GetProperty("openapi").GetString().ShouldStartWith("3.1");
+        document.RootElement.GetProperty("openapi").GetString().ShouldStartWith("3.2");
         JsonElement paths = document.RootElement.GetProperty("paths");
         paths.TryGetProperty("/api/products", out _).ShouldBeTrue();
         paths.TryGetProperty("/api/products/{id}", out _).ShouldBeTrue();
