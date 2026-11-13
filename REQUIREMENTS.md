@@ -1,4 +1,4 @@
-# .NET 10 Template – Claude Code Build Prompt
+# .NET 11 Template – Claude Code Build Prompt
 
 Oct 3, 2026 · @Ardent
 
@@ -17,7 +17,7 @@ Everything from **Role and goal** down is the prompt. Export the doc as Markdown
 
 ## Role and goal
 
-You are a senior .NET architect and Claude Code power user. Build a reusable **`dotnet new` project template** for an ASP.NET Core Web API on **.NET 10 (LTS) / C# 14** that I will use as the starting point for every new project.
+You are a senior .NET architect and Claude Code power user. Build a reusable **`dotnet new` project template** for an ASP.NET Core Web API on **.NET 11 (LTS) / C# 15** that I will use as the starting point for every new project.
 
 The template has two equal halves, and both must be production quality:
 
@@ -91,9 +91,9 @@ Ardent.Project/
 
 ### Build configuration
 
-- **`.slnx`** solution format (the .NET 10 default), not `.sln`.
-- **`global.json`** pins the .NET 10 SDK (`rollForward: latestFeature`) and opts `dotnet test` into Microsoft.Testing.Platform.
-- **`Directory.Build.props`**: `TargetFramework net10.0`, `Nullable enable`, `ImplicitUsings enable`, `TreatWarningsAsErrors true`, `AnalysisLevel latest-recommended`, `EnforceCodeStyleInBuild true`, `GenerateDocumentationFile true` (for OpenAPI descriptions; suppress CS1591 in test projects only).
+- **`.slnx`** solution format (the .NET 11 default), not `.sln`.
+- **`global.json`** pins the .NET 11 SDK (`rollForward: latestFeature`) and opts `dotnet test` into Microsoft.Testing.Platform.
+- **`Directory.Build.props`**: `TargetFramework net11.0`, `Nullable enable`, `ImplicitUsings enable`, `TreatWarningsAsErrors true`, `AnalysisLevel latest-recommended`, `EnforceCodeStyleInBuild true`, `GenerateDocumentationFile true` (for OpenAPI descriptions; suppress CS1591 in test projects only).
 - **`Directory.Packages.props`**: Central Package Management for every package version. No versions in `.csproj` files.
 - **`.editorconfig`** enforces the conventions below as build errors where the rule exists, so the compiler, `dotnet format` and Claude all agree.
 
@@ -331,7 +331,7 @@ Hooks are the deterministic guard rails. Keep them fast, quiet on success, and s
 **Requirements:**
 
 - Reference scripts as `"$CLAUDE_PROJECT_DIR"/.claude/hooks/<name>` and set an explicit `timeout` on each.
-- Language follows my Phase 0 answer: Bash + `jq` for macOS/Linux/WSL, PowerShell (`shell: powershell`) for Windows, or both. Measure the alternative of .NET 10 file-based C# apps (`dotnet run hook.cs`) and recommend it only if per-call latency is acceptable.
+- Language follows my Phase 0 answer: Bash + `jq` for macOS/Linux/WSL, PowerShell (`shell: powershell`) for Windows, or both. Measure the alternative of .NET 11 file-based C# apps (`dotnet run hook.cs`) and recommend it only if per-call latency is acceptable.
 - Fail open: an unexpected script error exits 0 with a stderr note; only deliberate policy blocks exit 2.
 - Test every hook by piping sample JSON into it, and document each one in `.claude/hooks/README.md` with how to disable it locally.
 - Put the desktop notification hook in the README as a suggested **user-level** setting, not in the committed project settings.

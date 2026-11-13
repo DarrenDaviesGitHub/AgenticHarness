@@ -1,6 +1,6 @@
 # Ardent.Project
 
-ASP.NET Core Web API on **.NET 11 / C# 15** built with Clean Architecture and CQRS. It ships with one complete sample feature (`Products` CRUD) that every new feature copies, and a Claude Code harness so AI-assisted work follows the same rules as you do.
+ASP.NET Core Web API on **.NET 11 / C# 15** built with Clean Architecture and CQRS. It ships with one complete sample feature (`Products` CRUD) that every new feature copies, and a Claude Code harness so AI assisted work follows the same rules as you do.
 
 | Concern | Choice |
 | --- | --- |
